@@ -1,4 +1,4 @@
-from nlp import generate_embeddings, detect_vagueness
+from .nlp import generate_embeddings, detect_vagueness
 
 if __name__ == "__main__":
     print("Please, query the system for some movie recommendation: ")

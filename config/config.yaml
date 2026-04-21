@@ -1,0 +1,10 @@
+model:
+  name: "all-MiniLM-L6-v2"
+  embedding_dim: 384
+
+retrieval:
+  top_k: 10
+  similarity_threshold: 0.75
+
+fuzzy:
+  enabled: true

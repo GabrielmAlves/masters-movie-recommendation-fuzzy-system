@@ -42,22 +42,18 @@ vague_terms = {
                   "top",
                   "legal"
                   ],
-    
-    "ritmo": ["lento",
-              "parado",
-              "rápido",
-              "dinâmico",
-              "arrastado"
-              ],
-    
-    "complexidade": ["simples",
-                     "fácil",
-                     "complexo",
-                     "difícil",
-                     "profundo"
-                     ],
+
     "popularidade": ["famoso",
                      "popular",
                      "desconhecido"
-                     ]
+                     ],
+    
+    "genero": ["comédia",
+               "ação",
+               "terror",
+               "drama",
+               "ficção científica",
+               "romance",
+               "suspense",
+               "fantasia"]
 }
