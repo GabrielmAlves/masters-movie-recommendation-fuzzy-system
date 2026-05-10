@@ -1,4 +1,5 @@
 import pickle
+import numpy as np
 from tqdm import tqdm
 from nlp.embedding import generate_embedding, generate_embeddings_batch
 from data.movie import Movie
@@ -25,6 +26,9 @@ def load_movies(movies_file: str) -> list[Movie]:
 
     return loaded_movies
 
+def normalize(score: float) -> float:
+    return (score + 1) / 2
+
 def build(movies: list[Movie]):
     print("Obtendo filmes..")
     
@@ -44,9 +48,9 @@ def build(movies: list[Movie]):
     print("Calculando scores...")
     
     for movie in tqdm(loaded_movies):
-        movie.funny_score = (compute_funny_score(movie.embedding) + 1) / 2
-        movie.tense_score = (compute_tension_score(movie.embedding) + 1) / 2
-        movie.action_score = (compute_action_score(movie.embedding) + 1) / 2
+        movie.funny_score = normalize(compute_funny_score(movie.embedding))
+        movie.tense_score = normalize(compute_tension_score(movie.embedding))
+        movie.action_score = normalize(compute_action_score(movie.embedding))
         
     print("Salvando scores...")
     

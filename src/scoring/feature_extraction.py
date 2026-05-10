@@ -1,6 +1,5 @@
 from sklearn.metrics.pairwise import cosine_similarity
 from nlp.embedding import get_model
-from data.movie import Movie
 import numpy
 
 _model = get_model()
