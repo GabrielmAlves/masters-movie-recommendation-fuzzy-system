@@ -1,8 +1,7 @@
 # from .nlp import generate_embeddings, detect_vagueness
 from data.dataset_loader import load_movies_database
-from nlp.embedding import generate_embeddings_batch
 from pipeline.build_features import build
-from tqdm import tqdm
+from ml.data_extract import get_data_distribution
 import pickle   
 
 if __name__ == "__main__":
@@ -16,13 +15,17 @@ if __name__ == "__main__":
     with open("movies_scores.pkl", "rb") as f:
         movies = pickle.load(f)
 
-    for m in movies[:20]:
+    for m in movies[:50]:
         print(m.title)
         print("funny:", m.funny_score)
         print("tension:", m.tense_score)
         print("action:", m.action_score)
         print("-----")
 
+    data_distribution = get_data_distribution(movies, "duration")
+    print("Data Distribution:")
+    for key, value in data_distribution.items():
+        print(f"  {key}: {value}")
     # query_embeddings = generate_embeddings(user_query)
     
     # vague_terms = detect_vagueness(user_query)
