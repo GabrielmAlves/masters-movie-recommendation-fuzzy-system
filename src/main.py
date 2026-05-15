@@ -3,6 +3,8 @@ from data.dataset_loader import load_movies_database
 from pipeline.build_features import build
 from ml.data_extract import get_data_distribution
 from ml.nlp import detect_vagueness
+from query.query_interpreter import interpret_query
+from ranking.ranker import rank_movies
 from fuzzy.fuzzification import fuzzify_duration
 import pickle   
 
@@ -24,14 +26,7 @@ if __name__ == "__main__":
     
     with open("movies_scores.pkl", "rb") as f:
         movies = pickle.load(f)
-
-    # for m in movies[:50]:
-    #     print(m.title)
-    #     print("funny:", m.funny_score)
-    #     print("tension:", m.tense_score)
-    #     print("action:", m.action_score)
-    #     print("-----")
-
+        
     data_distribution = get_data_distribution(movies, "duration")
     print("Data Distribution:")
     for key, value in data_distribution.items():
@@ -53,6 +48,20 @@ if __name__ == "__main__":
     )
     
     print(movies_ranked[:10])
-    # query_embeddings = generate_embeddings(user_query)
+    
+    interpreted_query = interpret_query(vague_terms)
+    
+    m_ranked = rank_movies(
+        movies,
+        interpreted_query
+    )
+    
+    print("\nTop recommendations:\n")
+
+    for movie in movies_ranked[:10]:
+        print(movie.title)
+        print("Tension:", movie.tense_score)
+        print("Duration:", movie.duration)
+        print("------")
     
         
