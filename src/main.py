@@ -12,12 +12,12 @@ if __name__ == "__main__":
     print("Please, query the system for some movie recommendation: ")
     user_query = input()
     
-    vague_terms = detect_vagueness(user_query)
+    detected_vague_terms = detect_vagueness(user_query)
     
-    if not vague_terms:
+    if not detected_vague_terms:
         print("There is no fuzziness in this query..")
     else:    
-        for fuzzy_term in vague_terms:
+        for fuzzy_term in detected_vague_terms:
             print(f"Fuzzy term: {fuzzy_term}")
     
     movies = load_movies_database("data/raw/TMDB_movie_dataset_v11.csv")
@@ -41,15 +41,7 @@ if __name__ == "__main__":
         for term, value in fuzzified_duration.items():
             print(f"  {term}: {value}")
     
-    movies_ranked = sorted(
-        movies,
-        key=lambda m: fuzzify_duration(m.duration)["curto"],
-        reverse=True
-    )
-    
-    print(movies_ranked[:10])
-    
-    interpreted_query = interpret_query(vague_terms)
+    interpreted_query = interpret_query(detected_vague_terms)
     
     m_ranked = rank_movies(
         movies,
@@ -58,8 +50,10 @@ if __name__ == "__main__":
     
     print("\nTop recommendations:\n")
 
-    for movie in movies_ranked[:10]:
+    for movie in m_ranked[:10]:
         print(movie.title)
+        print("Funny:", movie.funny_score)
+        print("Action:", movie.action_score)
         print("Tension:", movie.tense_score)
         print("Duration:", movie.duration)
         print("------")
