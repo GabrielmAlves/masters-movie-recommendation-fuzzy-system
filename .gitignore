@@ -105,3 +105,5 @@ fuzzyEnv/
 *.pkl
 *.csv
 *.npy
+
+*.md
