@@ -32,7 +32,7 @@ if __name__ == "__main__":
     for key, value in data_distribution.items():
         print(f"  {key}: {value}")
         
-    for movie in movies[:5]:
+    for movie in movies[:20]:
         print("Título do filme:", movie.title)
         print("Duração do filme:", movie.duration)
         
