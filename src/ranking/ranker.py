@@ -1,5 +1,5 @@
 from fuzzy.hedges import apply_hedge
-from fuzzy.fuzzification import fuzzify_duration
+from fuzzy.fuzzification import fuzzify_duration, fuzzify_tension
 from fuzzy.operators import fuzzy_and
 
 def compute_movie_score(movie, interpreted_query):
@@ -14,8 +14,10 @@ def compute_movie_score(movie, interpreted_query):
     if "emoção" in interpreted_query:
         emotion = interpreted_query["emoção"]
         
-        if emotion == "assustador":
-            emotion_score = movie.tense_score
+        if emotion in ["assustador", "tenso"]:
+            emotion_score = fuzzify_tension(
+                movie.tense_score
+            )["tenso"]
         elif emotion == "engraçado":
             emotion_score = movie.funny_score
         else:
