@@ -1,23 +1,23 @@
 # from .nlp import generate_embeddings, detect_vagueness
 from data.dataset_loader import load_movies_database
 from pipeline.build_features import build
-from ml.data_extract import get_data_distribution
+from ml.data_extract import get_distribution
 from ml.nlp import detect_vagueness
 from query.query_interpreter import interpret_query
 from ranking.ranker import rank_movies
-from fuzzy.fuzzification import fuzzify_duration
+from fuzzy.fuzzification import fuzzify_duration, fuzzify_tension
 import pickle   
 
 if __name__ == "__main__":
     print("Please, query the system for some movie recommendation: ")
     user_query = input()
     
-    vague_terms = detect_vagueness(user_query)
+    detected_vague_terms = detect_vagueness(user_query)
     
-    if not vague_terms:
+    if not detected_vague_terms:
         print("There is no fuzziness in this query..")
     else:    
-        for fuzzy_term in vague_terms:
+        for fuzzy_term in detected_vague_terms:
             print(f"Fuzzy term: {fuzzy_term}")
     
     movies = load_movies_database("data/raw/TMDB_movie_dataset_v11.csv")
@@ -27,29 +27,55 @@ if __name__ == "__main__":
     with open("movies_scores.pkl", "rb") as f:
         movies = pickle.load(f)
         
-    data_distribution = get_data_distribution(movies, "duration")
-    print("Data Distribution:")
-    for key, value in data_distribution.items():
+    duration_distribution = get_distribution(
+    movies,
+    "duration"
+)
+
+    print("\nDuration Distribution:")
+    for key, value in duration_distribution.items():
+        print(f"  {key}: {value}")
+
+
+    tension_distribution = get_distribution(
+        movies,
+        "tense_score"
+    )
+
+    print("\nTension Distribution:")
+    for key, value in tension_distribution.items():
+        print(f"  {key}: {value}")
+
+
+    funny_distribution = get_distribution(
+        movies,
+        "funny_score"
+    )
+
+    print("\nFunny Distribution:")
+    for key, value in funny_distribution.items():
+        print(f"  {key}: {value}")
+
+
+    action_distribution = get_distribution(
+        movies,
+        "action_score"
+    )
+
+    print("\nAction Distribution:")
+    for key, value in action_distribution.items():
         print(f"  {key}: {value}")
         
-    for movie in movies[:5]:
-        print("Título do filme:", movie.title)
-        print("Duração do filme:", movie.duration)
+    # for movie in movies[:20]:
+    #     print("Título do filme:", movie.title)
+    #     print("Duração do filme:", movie.duration)
         
-        print("Fuzzificação da duração do filme:")
-        fuzzified_duration = fuzzify_duration(movie.duration)
-        for term, value in fuzzified_duration.items():
-            print(f"  {term}: {value}")
+    #     print("Fuzzificação da duração do filme:")
+    #     fuzzified_duration = fuzzify_duration(movie.duration)
+    #     for term, value in fuzzified_duration.items():
+    #         print(f"  {term}: {value}")
     
-    movies_ranked = sorted(
-        movies,
-        key=lambda m: fuzzify_duration(m.duration)["curto"],
-        reverse=True
-    )
-    
-    print(movies_ranked[:10])
-    
-    interpreted_query = interpret_query(vague_terms)
+    interpreted_query = interpret_query(detected_vague_terms)
     
     m_ranked = rank_movies(
         movies,
@@ -58,10 +84,23 @@ if __name__ == "__main__":
     
     print("\nTop recommendations:\n")
 
-    for movie in movies_ranked[:10]:
+    for movie in m_ranked[:10]:
         print(movie.title)
+        print("Funny:", movie.funny_score)
+        print("Action:", movie.action_score)
         print("Tension:", movie.tense_score)
         print("Duration:", movie.duration)
+        print("------")
+        
+    for movie in movies[:5]:
+        print(movie.title)
+
+        print(
+            fuzzify_tension(
+                movie.tense_score
+            )
+        )
+
         print("------")
     
         
