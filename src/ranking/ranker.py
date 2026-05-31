@@ -5,6 +5,7 @@ from fuzzy.fuzzification import (
     fuzzify_funny
 )
 from fuzzy.operators import fuzzy_and
+from fuzzy.inference import mamdani_score
 
 def compute_movie_score(movie, interpreted_query):
     scores = []
@@ -75,9 +76,9 @@ def rank_movies(movies, interpreted_query):
 
     return sorted(
         movies,
-        key=lambda m: compute_movie_score(
+        key=lambda m: mamdani_score(
             m,
             interpreted_query
         ),
         reverse=True
-    )
+    )   

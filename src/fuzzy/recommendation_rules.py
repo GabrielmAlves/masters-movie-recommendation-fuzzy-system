@@ -1,8 +1,9 @@
-from src.fuzzy.rules import Rule
+from fuzzy.rules import Rule
 
 recommendation_rules = [
+
     Rule(
-        antecedents={
+        antecedent={
             "duração": "curto",
             "emoção": "engraçado"
         },
@@ -10,7 +11,7 @@ recommendation_rules = [
     ),
 
     Rule(
-        antecedents={
+        antecedent={
             "duração": "longo",
             "emoção": "tenso"
         },
@@ -18,21 +19,42 @@ recommendation_rules = [
     ),
 
     Rule(
-        antecedents={
+        antecedent={
+            "duração": "curto"
+        },
+        consequent="alta"
+    ),
+
+    Rule(
+        antecedent={
+            "duração": "médio"
+        },
+        consequent="alta"
+    ),
+
+    Rule(
+        antecedent={
+            "duração": "longo"
+        },
+        consequent="alta"
+    ),
+
+    Rule(
+        antecedent={
             "emoção": "engraçado"
         },
-        consequent="média"
+        consequent="alta"
     ),
 
     Rule(
-        antecedents={
+        antecedent={
             "emoção": "tenso"
         },
-        consequent="média"
+        consequent="alta"
     ),
 
     Rule(
-        antecedents={
+        antecedent={
             "duração": "curto",
             "emoção": "tenso"
         },
@@ -40,7 +62,7 @@ recommendation_rules = [
     ),
 
     Rule(
-        antecedents={
+        antecedent={
             "duração": "longo",
             "emoção": "engraçado"
         },

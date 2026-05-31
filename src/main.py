@@ -6,7 +6,11 @@ from ml.nlp import detect_vagueness
 from query.query_interpreter import interpret_query
 from ranking.ranker import rank_movies
 from fuzzy.fuzzification import fuzzify_duration, fuzzify_tension
-import pickle   
+import pickle
+
+from fuzzy.defuzzification import centroid_defuzzification
+from fuzzy.inference import mamdani_inference
+from fuzzy.aggregation import aggregate_rule_outputs
 
 if __name__ == "__main__":
     print("Please, query the system for some movie recommendation: ")
@@ -91,16 +95,35 @@ if __name__ == "__main__":
         print("Tension:", movie.tense_score)
         print("Duration:", movie.duration)
         print("------")
-        
-    for movie in movies[:5]:
-        print(movie.title)
-
-        print(
-            fuzzify_tension(
-                movie.tense_score
-            )
-        )
-
-        print("------")
     
-        
+    # aggregated_output = {
+    #     "baixa": 0.2,
+    #     "média": 0.6,
+    #     "alta": 0.8
+    # }
+
+    # score = centroid_defuzzification(
+    #     aggregated_output
+    # )
+
+    # print(score)
+    
+    movie = m_ranked[0]
+
+    rule_outputs = mamdani_inference(
+        movie,
+        interpreted_query
+    )
+    
+    aggregated_output = aggregate_rule_outputs(
+        rule_outputs
+    )
+
+    print(f"Aggregated Output: {aggregated_output}")
+
+    print(rule_outputs)
+    
+    movie = m_ranked[0]
+
+    print(movie.title)
+    print(fuzzify_duration(movie.duration))
