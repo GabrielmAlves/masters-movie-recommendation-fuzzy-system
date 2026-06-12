@@ -1,4 +1,3 @@
-# from .nlp import generate_embeddings, detect_vagueness
 from data.dataset_loader import load_movies_database
 from pipeline.build_features import build
 from ml.data_extract import get_distribution
@@ -13,16 +12,16 @@ from fuzzy.inference import mamdani_inference
 from fuzzy.aggregation import aggregate_rule_outputs
 
 if __name__ == "__main__":
-    print("Please, query the system for some movie recommendation: ")
+    print("Qual tipo de filme você gostaria?")
     user_query = input()
     
     detected_vague_terms = detect_vagueness(user_query)
     
     if not detected_vague_terms:
-        print("There is no fuzziness in this query..")
+        print("Essa requisição não tem termo fuzzy..")
     else:    
         for fuzzy_term in detected_vague_terms:
-            print(f"Fuzzy term: {fuzzy_term}")
+            print(f"Termo fuzzy detectado: {fuzzy_term}")
     
     movies = load_movies_database("data/raw/TMDB_movie_dataset_v11.csv")
     
@@ -32,11 +31,11 @@ if __name__ == "__main__":
         movies = pickle.load(f)
         
     duration_distribution = get_distribution(
-    movies,
-    "duration"
-)
+        movies,
+        "duration"
+    )
 
-    print("\nDuration Distribution:")
+    print("\nDistribuição da duração:")
     for key, value in duration_distribution.items():
         print(f"  {key}: {value}")
 
@@ -46,7 +45,7 @@ if __name__ == "__main__":
         "tense_score"
     )
 
-    print("\nTension Distribution:")
+    print("\nDistribuição de tensão:")
     for key, value in tension_distribution.items():
         print(f"  {key}: {value}")
 
@@ -56,7 +55,7 @@ if __name__ == "__main__":
         "funny_score"
     )
 
-    print("\nFunny Distribution:")
+    print("\nDistribuição de engraçado:")
     for key, value in funny_distribution.items():
         print(f"  {key}: {value}")
 
@@ -65,19 +64,46 @@ if __name__ == "__main__":
         movies,
         "action_score"
     )
+    
+    romance_distribution = get_distribution(
+        movies,
+        "romance_score"
+    )
+    
+    sci_fi_distribution = get_distribution(
+        movies,
+        "sci_fi_score"
+    )
+    
+    drama_distribution = get_distribution(
+        movies,
+        "drama_score"
+    )
+    
+    terror_distribution = get_distribution(
+        movies,
+        "terror_score"
+    )
 
-    print("\nAction Distribution:")
+    print("\nDistribuição de ação:")
     for key, value in action_distribution.items():
         print(f"  {key}: {value}")
-        
-    # for movie in movies[:20]:
-    #     print("Título do filme:", movie.title)
-    #     print("Duração do filme:", movie.duration)
-        
-    #     print("Fuzzificação da duração do filme:")
-    #     fuzzified_duration = fuzzify_duration(movie.duration)
-    #     for term, value in fuzzified_duration.items():
-    #         print(f"  {term}: {value}")
+    
+    print("Distribuição de romance: ")
+    for key, value in romance_distribution.items():
+        print(f"  {key}: {value}")
+    
+    print("Distribuição de ficção científica: ")
+    for key, value in sci_fi_distribution.items():
+        print(f"  {key}: {value}")
+    
+    print("Distribuição de drama: ")
+    for key, value in drama_distribution.items():
+        print(f"  {key}: {value}")
+    
+    print("Distribuição de terror: ")
+    for key, value in terror_distribution.items():
+        print(f"  {key}: {value}")
     
     interpreted_query = interpret_query(detected_vague_terms)
     
@@ -86,27 +112,18 @@ if __name__ == "__main__":
         interpreted_query
     )
     
-    print("\nTop recommendations:\n")
+    print("\nTop recomendações:\n")
 
     for movie in m_ranked[:10]:
         print(movie.title)
-        print("Funny:", movie.funny_score)
-        print("Action:", movie.action_score)
-        print("Tension:", movie.tense_score)
-        print("Duration:", movie.duration)
+        print("Grau de engraçado:", movie.funny_score)
+        print("Grau de ação:", movie.action_score)
+        print("Grau de tensão", movie.tense_score)
+        print("Grau de romance: ", movie.romance_score)
+        print("Grau de ficção científica: ", movie.sci_fi_score)
+        print("Grau de drama: ", movie.drama_score)
+        print("Duração do filme:", movie.duration)
         print("------")
-    
-    # aggregated_output = {
-    #     "baixa": 0.2,
-    #     "média": 0.6,
-    #     "alta": 0.8
-    # }
-
-    # score = centroid_defuzzification(
-    #     aggregated_output
-    # )
-
-    # print(score)
     
     movie = m_ranked[0]
 
@@ -119,11 +136,11 @@ if __name__ == "__main__":
         rule_outputs
     )
 
-    print(f"Aggregated Output: {aggregated_output}")
+    for key, value in aggregated_output.items():
+        print(f"Agregação das regras: {aggregated_output}")
 
-    print(rule_outputs)
-    
-    movie = m_ranked[0]
+    for output in rule_outputs:
+        print(f"Output das regras: {rule_outputs}")
 
     print(movie.title)
     print(fuzzify_duration(movie.duration))

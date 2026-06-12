@@ -6,7 +6,11 @@ from data.movie import Movie
 from scoring.feature_extraction import (
     compute_funny_score,
     compute_tension_score,
-    compute_action_score
+    compute_action_score,
+    compute_romance_score,
+    compute_science_fiction_score,
+    compute_terror_score,
+    compute_drama_score
 )
 
 MOVIES_PICKLE_FILE = "movies_clean.pkl"
@@ -51,6 +55,10 @@ def build(movies: list[Movie]):
         movie.funny_score = normalize(compute_funny_score(movie.embedding))
         movie.tense_score = normalize(compute_tension_score(movie.embedding))
         movie.action_score = normalize(compute_action_score(movie.embedding))
+        movie.romance_score = normalize(compute_romance_score(movie.embedding))
+        movie.sci_fi_score = normalize(compute_science_fiction_score(movie.embedding))
+        movie.terror_score = normalize(compute_terror_score(movie.embedding))
+        movie.drama_score = normalize(compute_drama_score(movie.embedding))
         
     print("Salvando scores...")
     
