@@ -1,20 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 def plot_histogram(values, attribute_name: str):
     plt.hist(values, bins=30)
 
     plt.xlabel(attribute_name)
-    plt.ylabel("Frequency")
-    plt.title(f"{attribute_name} Distribution")
+    plt.ylabel("Frequência")
+    plt.title(f"Distribuição de {attribute_name}")
 
     plt.show()
 
-
 def get_percentiles(data):
     return np.percentile(data, [25, 50, 75])
-
 
 def get_distribution(data, attribute_name: str):
     values = []

@@ -13,6 +13,10 @@ class Movie:
         self.funny_score = None
         self.tense_score = None
         self.action_score = None
+        self.romance_score = None
+        self.sci_fi_score = None
+        self.terror_score = None
+        self.drama_score = None
         
     def __repr__(self):
         return f"Movie(title={self.title}, duration={self.duration})"
