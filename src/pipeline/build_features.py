@@ -1,11 +1,16 @@
 import pickle
+import numpy as np
 from tqdm import tqdm
 from nlp.embedding import generate_embedding, generate_embeddings_batch
 from data.movie import Movie
 from scoring.feature_extraction import (
     compute_funny_score,
     compute_tension_score,
-    compute_action_score
+    compute_action_score,
+    compute_romance_score,
+    compute_science_fiction_score,
+    compute_terror_score,
+    compute_drama_score
 )
 
 MOVIES_PICKLE_FILE = "movies_clean.pkl"
@@ -24,6 +29,9 @@ def load_movies(movies_file: str) -> list[Movie]:
         loaded_movies = pickle.load(movie_file)
 
     return loaded_movies
+
+def normalize(score: float) -> float:
+    return (score + 1) / 2
 
 def build(movies: list[Movie]):
     print("Obtendo filmes..")
@@ -44,9 +52,13 @@ def build(movies: list[Movie]):
     print("Calculando scores...")
     
     for movie in tqdm(loaded_movies):
-        movie.funny_score = (compute_funny_score(movie.embedding) + 1) / 2
-        movie.tense_score = (compute_tension_score(movie.embedding) + 1) / 2
-        movie.action_score = (compute_action_score(movie.embedding) + 1) / 2
+        movie.funny_score = normalize(compute_funny_score(movie.embedding))
+        movie.tense_score = normalize(compute_tension_score(movie.embedding))
+        movie.action_score = normalize(compute_action_score(movie.embedding))
+        movie.romance_score = normalize(compute_romance_score(movie.embedding))
+        movie.sci_fi_score = normalize(compute_science_fiction_score(movie.embedding))
+        movie.terror_score = normalize(compute_terror_score(movie.embedding))
+        movie.drama_score = normalize(compute_drama_score(movie.embedding))
         
     print("Salvando scores...")
     
